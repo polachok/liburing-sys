@@ -1,0 +1,8 @@
+[package]
+name = "liburing-sys"
+version = "0.1.0"
+authors = ["plhk"]
+edition = "2018"
+
+[build-dependencies]
+bindgen = "0.49"
