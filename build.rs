@@ -5,37 +5,40 @@ use std::path::PathBuf;
 use std::process::Command;
 
 fn main() {
-	let out_dir = env::var("OUT_DIR").unwrap();
+    let out_dir = env::var("OUT_DIR").unwrap();
 
-	Command::new("rm")
-		.arg("-rf")
-		.arg(format!("{}/liburing", out_dir.clone()))
-		.status()
-		.expect("failed to remove");
-	Command::new("cp")
-		.arg("-r")
-		.arg("liburing")
-		.arg(out_dir.clone())
-		.status()
-		.expect("failed to copy");
+    Command::new("rm")
+        .arg("-rf")
+        .arg(format!("{}/liburing", out_dir.clone()))
+        .status()
+        .expect("failed to remove");
+    Command::new("cp")
+        .arg("-r")
+        .arg("liburing")
+        .arg(out_dir.clone())
+        .status()
+        .expect("failed to copy");
     Command::new("make")
-		.arg("liburing.a")
-		.current_dir(format!("{}/liburing/src", out_dir.clone()))
-		.status()
-		.expect("failed to execute make");
+        .arg("liburing.a")
+        .current_dir(format!("{}/liburing/src", out_dir.clone()))
+        .env("CFLAGS", "-fPIC")
+        .status()
+        .expect("failed to execute make");
     // Tell cargo to tell rustc to link the system bzip2
     // shared library.
     println!("cargo:rustc-link-lib=static=uring");
-    println!("cargo:rustc-link-search=native={}/liburing/src", out_dir.clone());
-
+    println!(
+        "cargo:rustc-link-search=native={}/liburing/src",
+        out_dir.clone()
+    );
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-	.clang_arg("-D_GNU_SOURCE")
-	.whitelist_function("io_uring.*")
-	.whitelist_type("io_uring.*")
+        .clang_arg("-D_GNU_SOURCE")
+        .whitelist_function("io_uring.*")
+        .whitelist_type("io_uring.*")
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
