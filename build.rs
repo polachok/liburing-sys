@@ -32,12 +32,17 @@ fn main() {
         out_dir.clone()
     );
 
+	cc::Build::new()
+        .file("wrapper.c")
+		.compile("wrapper");
+
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
         .clang_arg("-D_GNU_SOURCE")
         .whitelist_function("io_uring.*")
+        .whitelist_function("_io_uring.*")
         .whitelist_type("io_uring.*")
         // The input header we would like to generate
         // bindings for.
