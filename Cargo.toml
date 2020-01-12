@@ -10,8 +10,8 @@ homepage = "https://github.com/polachok/liburing-sys"
 description = "raw bindings for liburing"
 
 [build-dependencies]
-bindgen = "0.49"
+bindgen = "0.51"
 cc = "1.0"
 
 [dependencies]
-libc = "0.2"
+libc = { version = "0.2", default-features = false }

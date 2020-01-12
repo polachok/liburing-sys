@@ -1,6 +1,7 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
+#![no_std]
 
 use libc;
 
@@ -20,7 +21,7 @@ pub unsafe fn io_uring_prep_readv(
     nr_vecs: libc::c_uint,
     offset: libc::off_t,
 ) {
-    _io_uring_prep_readv(sqe, fd, std::mem::transmute(iovecs), nr_vecs, offset)
+    _io_uring_prep_readv(sqe, fd, core::mem::transmute(iovecs), nr_vecs, offset)
 }
 
 pub unsafe fn io_uring_prep_read_fixed(
@@ -40,7 +41,7 @@ pub unsafe fn io_uring_prep_writev(
     nr_vecs: libc::c_uint,
     offset: libc::off_t,
 ) {
-    _io_uring_prep_writev(sqe, fd, std::mem::transmute(iovecs), nr_vecs, offset)
+    _io_uring_prep_writev(sqe, fd, core::mem::transmute(iovecs), nr_vecs, offset)
 }
 
 pub unsafe fn io_uring_prep_write_fixed(
