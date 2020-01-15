@@ -40,6 +40,8 @@ fn main() {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
+        .use_core()
+        .ctypes_prefix("libc")
         .clang_arg("-D_GNU_SOURCE")
         .whitelist_function("io_uring.*")
         .whitelist_function("_io_uring.*")
